@@ -1,0 +1,10 @@
+# Folders containing binaries #
+build
+dist
+# Binary filetype for distirbution.. #
+# This way the distribution infrastructure can be shared at github #
+# This is usually no problem because the infrastructure won't change much. #
+# The big binaries would be a problem. #
+*.jar
+*.exe
+*.deb
