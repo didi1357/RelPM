@@ -1,0 +1,10 @@
+Package: relpm
+Version: 1.0-1
+Section: utils
+Priority: optional
+Architecture: all
+Depends: openjdk-9-jre | openjdk-8-jre | openjdk-7-jre | oracle-java9-installer | oracle-java8-installer | oracle-java7-installer
+Maintainer: Dietmar Malli <dietmar@malli.co.at>
+Description: Relative Playlist manager.
+ This is a small little tool written in java to help you manage your
+ playlists with focus on relative paths.

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RelPM
+Comment=Relative Playlist Manager
+Exec=/usr/bin/relpm
+Icon=relpm
+Categories=AudioVideo
+Version=1.0
+Type=Application
