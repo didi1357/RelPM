@@ -1,0 +1,5 @@
+foo (1.0-1) stable; urgency=low
+
+  * Initial Release.
+
+ -- Dietmar Malli <dietmar@malli.co.at>  Mon, 15 Dec 2014 01:25:38 +0100
