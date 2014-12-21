@@ -1,0 +1,11 @@
+relpm (1.0-2) stable; urgency=low
+
+  * Fixed a small packaging issue
+
+ -- Dietmar Malli <dietmar@malli.co.at>  Sun, 21 Dec 2014 13:10:41 +0100
+
+relpm (1.0-1) stable; urgency=low
+
+  * Initial Release.
+
+ -- Dietmar Malli <dietmar@malli.co.at>  Mon, 15 Dec 2014 01:25:38 +0100
