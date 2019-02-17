@@ -51,10 +51,7 @@ public class FileHelpers
     String list = playlistDirectory.getAbsolutePath();
     String absolute = track.getAbsolutePath();
     String relative;
-    if(track.getAbsolutePath().contains("\\"))
-      relative = ResourceUtils.getRelativePath(absolute, list, "\\");
-    else
-      relative = ResourceUtils.getRelativePath(absolute, list, "/");
+    relative = ResourceUtils.getRelativePath(absolute, list, "/");
     return relative;
   }
 }

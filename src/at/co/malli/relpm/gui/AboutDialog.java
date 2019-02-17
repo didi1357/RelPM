@@ -64,7 +64,7 @@ public class AboutDialog extends javax.swing.JDialog
     jLalIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/co/malli/relpm/gui/icons/RelPM/RelPM_64x64.png"))); // NOI18N
     jPanNorth.add(jLalIcon);
 
-    jLabVersion.setText("Version: 1.0");
+    jLabVersion.setText("Version: 1.1");
     jPanNorth.add(jLabVersion);
 
     getContentPane().add(jPanNorth, java.awt.BorderLayout.NORTH);
