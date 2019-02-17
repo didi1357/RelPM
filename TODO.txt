@@ -5,6 +5,7 @@ Bugs to fix:
 Maximixing the window leaves the list too small sometimes.
 
 Features to implement:
+Don't write _last100 if size of list < 100!
 Implement context menu for titles to show details!
 Tooltip text to tell about search of songs! / Search box?
 Check if file already in list / Show duplicate entries checkbox
