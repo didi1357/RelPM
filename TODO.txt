@@ -10,6 +10,6 @@ Tooltip text to tell about search of songs! / Search box?
 Check if file already in list / Show duplicate entries checkbox
 Native File Chooser
 Export List to directory (with and without allowing to preserve hierarchy)
-Allow to abort completely or/remove song if one is missing upon parsing
+Allow to remove song or replace with another if one is missing upon parsing!
 Scroll to end of list upon opening
 Don't show Non-ASCII Dialog => Always use UTF-8 as default and allow other encodings via options!
