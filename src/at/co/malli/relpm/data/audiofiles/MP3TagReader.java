@@ -51,7 +51,7 @@ public class MP3TagReader implements TagReader
     artist = (String) properties.get("author"); //null is a sane value for TrackFile...
     title = (String) properties.get("title"); //null is a sane value for TrackFile...
     if(properties.get("duration") != null)
-      lengthSeconds = (int) (((long)properties.get("duration"))/1000);
+      lengthSeconds = (int) (((long)properties.get("duration"))/(1000*1000));
     else
       lengthSeconds = -1;
   }

@@ -33,6 +33,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -184,6 +185,48 @@ public class MainGUI extends javax.swing.JFrame
     jList.setVisible(true);
     updateButtonStates();
     alreadySaved = true;
+  }
+  
+  /**
+   * This method creates a new empty list.
+   */
+  private void createList ()
+  {
+    JFileChooser chooser = new JFileChooser();
+    if(lastSave!=null)
+      chooser.setSelectedFile(lastSave);
+    else
+    {
+      if(lastFile!=null)
+        chooser.setSelectedFile(lastFile);
+    }
+    FileNameExtensionFilter m3u = new FileNameExtensionFilter("M3U-Playlists (.m3u, .m3u8)", "m3u", "m3u8");
+    chooser.setFileFilter(m3u);
+    chooser.addChoosableFileFilter(chooser.getAcceptAllFileFilter());
+    int returnVal = chooser.showSaveDialog(this);
+    if(returnVal == JFileChooser.APPROVE_OPTION)
+    {
+      try
+      {
+        chooser.getSelectedFile().createNewFile();
+      }
+      catch (IOException e)
+      {
+        StatusNotifier.getInstance().fireStatusEvent(this, "Could not create empty playlist file in desired location!");
+        return;
+      }
+      lastFile = chooser.getSelectedFile();
+      lastSave = chooser.getSelectedFile();
+    }
+    else
+    {
+      StatusNotifier.getInstance().fireStatusEvent(this, "Create dialog canceled by user! Location is currently needed to calculate relative paths!");
+      return;
+    }
+    SettingsProvider.getInstance().set("gui.lastFile", lastSave.getAbsoluteFile());
+    
+    PlaylistFileReadWorker readWorker = new PlaylistFileReadWorker(this, lastFile);
+    readWorker.execute();
   }
   
   /**
@@ -387,6 +430,7 @@ public class MainGUI extends javax.swing.JFrame
   {
     if(jList.isVisible())
     {
+      jButCreate.setEnabled(false);
       jButOpen.setEnabled(false);
       jButSave.setEnabled(true);
       jButCloseList.setEnabled(true);
@@ -398,6 +442,7 @@ public class MainGUI extends javax.swing.JFrame
       jButNext.setEnabled(true);
       jButPrevious.setEnabled(true);
       jButRandom.setEnabled(true);
+      jMenuItemCreate.setEnabled(false);
       jMenuItemOpen.setEnabled(false);
       jMenuItemSave.setEnabled(true);
       jMenuItemSaveAs.setEnabled(true);
@@ -407,6 +452,7 @@ public class MainGUI extends javax.swing.JFrame
     }
     else
     {
+      jButCreate.setEnabled(true);
       jButOpen.setEnabled(true);
       jButSave.setEnabled(false);
       jButCloseList.setEnabled(false);
@@ -418,6 +464,7 @@ public class MainGUI extends javax.swing.JFrame
       jButNext.setEnabled(false);
       jButPrevious.setEnabled(false);
       jButRandom.setEnabled(false);
+      jMenuItemCreate.setEnabled(true);
       jMenuItemOpen.setEnabled(true);
       jMenuItemSave.setEnabled(false);
       jMenuItemSaveAs.setEnabled(false);
@@ -497,6 +544,7 @@ public class MainGUI extends javax.swing.JFrame
     jPanStatusCenter = new javax.swing.JPanel();
     jTFstatus = new StatusBar();
     jPanNorth = new javax.swing.JPanel();
+    jButCreate = new javax.swing.JButton();
     jButOpen = new javax.swing.JButton();
     jButSave = new javax.swing.JButton();
     jButCloseList = new javax.swing.JButton();
@@ -511,6 +559,7 @@ public class MainGUI extends javax.swing.JFrame
     jButRandom = new javax.swing.JButton();
     jMenuBar = new javax.swing.JMenuBar();
     jMenuFile = new javax.swing.JMenu();
+    jMenuItemCreate = new javax.swing.JMenuItem();
     jMenuItemOpen = new javax.swing.JMenuItem();
     jMenuItemSave = new javax.swing.JMenuItem();
     jMenuItemSaveAs = new javax.swing.JMenuItem();
@@ -572,6 +621,17 @@ public class MainGUI extends javax.swing.JFrame
     getContentPane().add(jPanStatus, java.awt.BorderLayout.SOUTH);
 
     jPanNorth.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+    jButCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/co/malli/relpm/gui/icons/MeBazeBunchOfBluish/buttons/newList.png"))); // NOI18N
+    jButCreate.setToolTipText("Create a new empty list");
+    jButCreate.addActionListener(new java.awt.event.ActionListener()
+    {
+      public void actionPerformed(java.awt.event.ActionEvent evt)
+      {
+        jButCreateActionPerformed(evt);
+      }
+    });
+    jPanNorth.add(jButCreate);
 
     jButOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/co/malli/relpm/gui/icons/MeBazeBunchOfBluish/buttons/open.png"))); // NOI18N
     jButOpen.setToolTipText("Open");
@@ -702,6 +762,18 @@ public class MainGUI extends javax.swing.JFrame
     getContentPane().add(jPanEast, java.awt.BorderLayout.EAST);
 
     jMenuFile.setText("File");
+
+    jMenuItemCreate.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+    jMenuItemCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/co/malli/relpm/gui/icons/MeBazeBunchOfBluish/menuItems/newList.png"))); // NOI18N
+    jMenuItemCreate.setText("New");
+    jMenuItemCreate.addActionListener(new java.awt.event.ActionListener()
+    {
+      public void actionPerformed(java.awt.event.ActionEvent evt)
+      {
+        jMenuItemCreateActionPerformed(evt);
+      }
+    });
+    jMenuFile.add(jMenuItemCreate);
 
     jMenuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
     jMenuItemOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/co/malli/relpm/gui/icons/MeBazeBunchOfBluish/menuItems/open.png"))); // NOI18N
@@ -929,8 +1001,19 @@ public class MainGUI extends javax.swing.JFrame
     insertSong();
   }//GEN-LAST:event_jButInsertSongActionPerformed
 
+  private void jButCreateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButCreateActionPerformed
+  {//GEN-HEADEREND:event_jButCreateActionPerformed
+    createList();
+  }//GEN-LAST:event_jButCreateActionPerformed
+
+  private void jMenuItemCreateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemCreateActionPerformed
+  {//GEN-HEADEREND:event_jMenuItemCreateActionPerformed
+    createList();
+  }//GEN-LAST:event_jMenuItemCreateActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButCloseList;
+  private javax.swing.JButton jButCreate;
   private javax.swing.JButton jButInsertSong;
   private javax.swing.JButton jButNext;
   private javax.swing.JButton jButOpen;
@@ -949,6 +1032,7 @@ public class MainGUI extends javax.swing.JFrame
   private javax.swing.JMenuItem jMenuItemAbout;
   private javax.swing.JMenuItem jMenuItemCloseApp;
   private javax.swing.JMenuItem jMenuItemCloseList;
+  private javax.swing.JMenuItem jMenuItemCreate;
   private javax.swing.JMenuItem jMenuItemInsertSong;
   private javax.swing.JMenuItem jMenuItemOpen;
   private javax.swing.JMenuItem jMenuItemRemoveSong;

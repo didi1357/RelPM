@@ -1,0 +1,15 @@
+Implementation mistakes to fix:
+TrackFile contains relative path => Should not be stored. Should be calculated when needed!
+
+Bugs to fix:
+Maximixing the window leaves the list too small sometimes.
+
+Features to implement:
+Implement context menu for titles to show details!
+Tooltip text to tell about search of songs! / Search box?
+Check if file already in list / Show duplicate entries checkbox
+Native File Chooser
+Export List to directory (with and without allowing to preserve hierarchy)
+Allow to abort completely or/remove song if one is missing upon parsing
+Scroll to end of list upon opening
+Don't show Non-ASCII Dialog => Always use UTF-8 as default and allow other encodings via options!

@@ -91,7 +91,8 @@ public class TrackFileListModel extends AbstractListModel<TrackFile>
   public void addInitial (TrackFileList list)
   {
     this.list = list;
-    fireIntervalAdded(this, 0, list.getSize()-1);
+    if(list.getSize() > 0)
+      fireIntervalAdded(this, 0, list.getSize() - 1);
   }
   /**
    * Seraches for the index of an element in the list.

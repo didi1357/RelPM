@@ -62,10 +62,10 @@ public class PlaylistFileWriteWorker extends SwingWorker<Object,Integer> //usele
   private final File playlistFile;
   private final MainGUI mainGUI;
   
-  public PlaylistFileWriteWorker (MainGUI reference, TrackFileList toDo, File toWrite)
+  public PlaylistFileWriteWorker (MainGUI reference, TrackFileList toSave, File toWrite)
   {
     this.prog = new ProgressDialog(null, false); //must not be modal because of being called in edt...
-    this.list = toDo;
+    this.list = toSave;
     this.encoding = "DEFAULT";
     this.playlistFile = toWrite;
     this.mainGUI = reference;
@@ -141,7 +141,9 @@ public class PlaylistFileWriteWorker extends SwingWorker<Object,Integer> //usele
       else
         bw = new BufferedWriter(new FileWriter(wantedFile)); //ASCII-only.. no matter which encoding...
       lineWriter.writeIntro(bw,wantedFile,encoding);
-      for(int i = list.getSize()-100; i<list.getSize(); i++)
+      int firstIndex = (list.getSize() >= 100 ? list.getSize() - 100 : 0);
+      int lastIndex = list.getSize();
+      for(int i = firstIndex; i < lastIndex; i++)
         lineWriter.writeTrackFile(bw, wantedFile, list.get(i));
       lineWriter.writeOutro(bw,wantedFile,encoding);
       bw.flush();
