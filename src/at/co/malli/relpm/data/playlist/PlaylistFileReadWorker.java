@@ -160,6 +160,7 @@ public class PlaylistFileReadWorker extends SwingWorker<TrackFileList,Integer> /
         if(userSuppliedAudioFile != null)
         {
           parser.addLine(lines.get(i),userSuppliedAudioFile);
+          userSuppliedAudioFile = null;
         }
         else
           parser.addLine(lines.get(i));
